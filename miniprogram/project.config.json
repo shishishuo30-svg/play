@@ -1,0 +1,20 @@
+{
+  "description": "云空战棋：飞机部位猜击双人小游戏",
+  "miniprogramRoot": "./",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "packOptions": {
+    "ignore": [{ "type": "folder", "value": "cloudfunctions" }, { "type": "folder", "value": "tests" }]
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.8.8",
+  "appid": "touristappid",
+  "projectname": "plane-duel",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "compileHotReLoad": true
+  }
+}

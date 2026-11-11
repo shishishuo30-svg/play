@@ -1,0 +1,4 @@
+# 将 GAME_DOMAIN 环境变量设置为真实域名，DNS 指向运行 Caddy 的服务器。
+{$GAME_DOMAIN} {
+    reverse_proxy 127.0.0.1:3000
+}

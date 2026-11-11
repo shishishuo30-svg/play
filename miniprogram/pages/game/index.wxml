@@ -1,0 +1,73 @@
+<view class="page">
+  <view class="topbar">
+    <view class="brand">
+      <view class="brand-icon">✈</view>
+      <view><view class="eyebrow">SKY GRID · HEADHUNT</view><view class="brand-title">云空战棋</view></view>
+    </view>
+    <view class="restart" bindtap="confirmRestart">↻　新对局</view>
+  </view>
+
+  <view class="intro">
+    <view class="intro-copy"><view class="intro-title">瞄准机头，击落机群</view><view class="intro-desc">猜中机身可以找方向；只有命中机头，才能击毁整架飞机。</view></view>
+    <view class="hero-plane">✈</view>
+  </view>
+
+  <view class="scorebar">
+    <view class="player {{playerOneActive ? 'active' : ''}}"><view class="avatar">P1</view><view><view class="player-name">飞行员 01</view><view class="player-note">{{playerOneActive ? '正在猜击' : '等待交接'}}</view></view></view>
+    <view class="score">{{scoreOne}} <text>击落</text> : {{scoreTwo}} <text>击落</text></view>
+    <view class="player right {{playerTwoActive ? 'active' : ''}}"><view class="player-copy"><view class="player-name">飞行员 02</view><view class="player-note">{{playerTwoActive ? '正在猜击' : '等待交接'}}</view></view><view class="avatar">P2</view></view>
+  </view>
+
+  <view class="online-panel">
+    <view class="card-title">在线双人对战</view>
+    <view class="online-controls" wx:if="{{!online}}">
+      <button class="restart" size="mini" bindtap="createRoom" disabled="{{connecting}}">创建房间</button>
+      <input class="room-input" type="number" maxlength="6" placeholder="6 位房间号" value="{{roomCode}}" bindinput="onRoomInput" disabled="{{connecting}}" />
+      <button class="restart" size="mini" bindtap="joinRoom" disabled="{{connecting}}">加入房间</button>
+    </view>
+    <view class="hint">{{connecting ? '正在连接…' : onlineStatus}}</view>
+    <view wx:if="{{online}}" class="restart leave-room" bindtap="leaveRoom">退出房间 · 返回本机双人</view>
+  </view>
+
+  <view class="board-card">
+    <view class="board-head"><view class="board-title">{{title}}</view><view class="turn-pill">{{turnLabel}}</view></view>
+    <view class="grid-frame">
+      <view class="col-axis"><view wx:for="{{columns}}" wx:key="*this">{{item}}</view></view>
+      <view class="row-axis"><view wx:for="{{rows}}" wx:key="*this">{{item}}</view></view>
+      <view class="board">
+        <view wx:for="{{boardRows}}" wx:key="id" class="board-row">
+          <view wx:for="{{item.cells}}" wx:for-item="cell" wx:key="col" class="{{cell.className}}" data-row="{{cell.row}}" data-col="{{cell.col}}" bindtouchstart="onCellTouchStart" bindlongpress="onCellLongPress" bindtap="onCellTap">{{cell.mark}}</view>
+        </view>
+        <image wx:for="{{models}}" wx:key="id" class="plane-model" src="{{item.src}}" style="{{item.style}}" mode="scaleToFill" />
+      </view>
+    </view>
+    <view class="board-caption"><view>点击猜击 · 长按插红旗，再次长按取消</view><view>已猜 {{shotCount}} 格</view></view>
+    <view wx:if="{{gameOver}}" class="restart" bindtap="reviewBoard">查看另一方空域</view>
+  </view>
+
+  <view class="info-row">
+    <view class="side-card fleet-card">
+      <view class="card-title">对方机群 · 击毁进度</view>
+      <view class="fleet-row" wx:for="{{fleet}}" wx:for-item="fleetItem" wx:key="id"><view>飞机 0{{index + 1}}</view><view class="fleet-icons"><text class="{{fleetItem.destroyed ? 'plane-icon down' : 'plane-icon'}}">✈ {{fleetItem.destroyed ? '已击毁' : '未击毁'}}</text></view></view>
+      <view class="hint">每架飞机有 10 个部位格，机头是唯一的击毁目标。三架随机布局，互不相邻。</view>
+    </view>
+    <view class="side-card rules-card">
+      <view class="card-title">战场信号</view>
+      <view class="rule"><view class="rule-icon">✈</view><view>击中机头：击毁飞机</view></view>
+      <view class="rule"><view class="rule-icon red">✓</view><view>击中机身：方向线索</view></view>
+      <view class="rule"><view class="rule-icon hollow"></view><view>没有命中：空格</view></view>
+    </view>
+  </view>
+  <view wx:if="{{resultVisible}}" class="result-panel"><view class="result-text">{{resultText}}</view><view class="primary" bindtap="nextTurn">{{nextLabel}}</view></view>
+  <view class="footer">双人轮流对战 · 每次猜击后交换回合 · 先击落三架飞机获胜</view>
+
+  <view wx:if="{{handoffVisible}}" class="overlay">
+    <view class="dialog">
+      <view class="dialog-icon">{{handoffIcon}}</view>
+      <view class="eyebrow">PASS THE DEVICE</view>
+      <view class="dialog-title">{{handoffTitle}}</view>
+      <view class="dialog-text">{{handoffText}}</view>
+      <view class="primary" bindtap="continueGame">{{handoffButton}}</view>
+    </view>
+  </view>
+</view>

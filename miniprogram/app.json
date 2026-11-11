@@ -1,0 +1,12 @@
+{
+  "pages": ["pages/game/index"],
+  "window": {
+    "navigationBarTitleText": "云空战棋",
+    "navigationBarBackgroundColor": "#0b1d23",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0b1d23",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
